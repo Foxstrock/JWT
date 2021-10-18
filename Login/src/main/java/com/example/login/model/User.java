@@ -1,10 +1,9 @@
 package com.example.login.model;
 
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
 
 @Entity
@@ -16,18 +15,23 @@ public class User {
     String username;
     String name;
     String surname;
+    String password;
     String birthday;
+    @ManyToMany(fetch = FetchType.EAGER)
+    Collection<Role> roles = new ArrayList<>();
 
     public User() {
     }
 
-    public User(Long id, String email, String username, String name, String surname, String birthday) {
+    public User(Long id, String email, String username, String name, String surname, String password, String birthday, Collection<Role> roles) {
         this.id = id;
         this.email = email;
         this.username = username;
         this.name = name;
         this.surname = surname;
+        this.password = password;
         this.birthday = birthday;
+        this.roles = roles;
     }
 
     public Long getId() {
@@ -37,6 +41,10 @@ public class User {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public String getPassword(){return password;}
+
+    public void setPassword(String password){this.password = password;}
 
     public String getEmail() {
         return email;
@@ -76,5 +84,13 @@ public class User {
 
     public void setBirthday(String birthday) {
         this.birthday = birthday;
+    }
+
+    public Collection<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Collection<Role> roles) {
+        this.roles = roles;
     }
 }
