@@ -1,25 +1,29 @@
 package com.example.login.Api;
 
+import com.example.login.Service.UserService;
 import com.example.login.model.User;
 import com.example.login.repository.RoleRepository;
 import com.example.login.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 import java.util.regex.Pattern;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/registration")
 public class RegisterService {
-    @Autowired
-    UserRepository userRepository;
-    RoleRepository roleRepository;
+
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final UserService userService;
+
+    private final PasswordEncoder passwordEncoder;
+
 
 
     @PostMapping("/register")
@@ -37,7 +41,41 @@ public class RegisterService {
         UUID StringGe = UUID.randomUUID();
         password = StringGe.toString().replace("-","");
         password = password.replace(".","");
-        user.setPassword(password);
+
+
+        user.setPassword(passwordEncoder.encode(password));
+
+        userService.sendMail(user.getEmail(), password);
+
+        return ResponseEntity.ok().body(userRepository.save(user));
+    }
+
+    @PutMapping("/forgotpassword")
+    private ResponseEntity<User> forgotPassword(@RequestBody String username){
+        User newUser = userRepository.findByUsername(username);
+        newUser.setTempPassword(true);
+        String password;
+
+        UUID StringGe = UUID.randomUUID();
+        password = StringGe.toString().replace("-","");
+        password = password.replace(".","");
+
+
+        newUser.setPassword(passwordEncoder.encode(password));
+
+        userService.sendMail(newUser.getEmail(), password);
+
+        return ResponseEntity.ok().body(userRepository.save(newUser));
+
+    }
+
+    @PutMapping("/changepassword")
+    private ResponseEntity<User> changePassword(@RequestBody String username, String newPassword){
+        User user = userRepository.findByUsername(username);
+
+        newPassword = passwordEncoder.encode(newPassword);
+        user.setPassword(newPassword);
+        user.setTempPassword(false);
 
         return ResponseEntity.ok().body(userRepository.save(user));
     }

@@ -4,7 +4,9 @@ package com.example.login.Security;
 
 import com.example.login.filter.CustomAuthenticationFilter;
 import com.example.login.filter.CustomAuthorizazionFilter;
+import com.example.login.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,6 +29,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Autowired
+    UserRepository userRepository;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -52,7 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers(GET , "/user/**").hasAnyAuthority("ROLE_USER");
         http.authorizeRequests().antMatchers(POST , "/user/save/**").hasAnyAuthority("ROLE_ADMIN");
         http.authorizeRequests().anyRequest().authenticated();
-        http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean()));
+        http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean(), userRepository));
         http.addFilterBefore(new CustomAuthorizazionFilter() , UsernamePasswordAuthenticationFilter.class);
     }
 

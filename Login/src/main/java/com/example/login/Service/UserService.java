@@ -15,4 +15,5 @@ public interface UserService {
     List<User> getUsers();
     UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
     void deleteAll();
+    void sendMail(String email , String password);
 }

@@ -7,6 +7,9 @@ import com.example.login.repository.UserRepository;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -29,6 +32,8 @@ public class UserServiceImpl implements UserService,UserDetailsService{
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+
+    private final JavaMailSender javaMailSender;
 
     @Override
     public User saveUser(User user) {
@@ -83,6 +88,18 @@ public class UserServiceImpl implements UserService,UserDetailsService{
         roleRepository.deleteAll();
 
         log.info("All element are Elimineted");
+    }
+
+    @Override
+    public void sendMail(String email,String password) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        User user = new User();
+        message.setTo(email);
+        message.setSubject("First Access");
+        message.setText("Your password is :" + password);
+
+        javaMailSender.send(message);
+
     }
 
 

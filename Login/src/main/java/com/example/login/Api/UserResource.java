@@ -33,7 +33,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/user")
-public class UserResource {
+public class UserResource{
 
     private final UserService userService;
     private final RoleRepository roleRepository;
@@ -65,7 +65,7 @@ public class UserResource {
         if(authorizationHeader != null && authorizationHeader.startsWith("Bearer")){
 
             try{
-                String refresh_token = authorizationHeader.substring("Bearer".length());
+                String refresh_token = authorizationHeader.substring("Bearer ".length());
                 Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
                 JWTVerifier verifier = JWT.require(algorithm).build();
                 DecodedJWT decodedJWT = verifier.verify(refresh_token);

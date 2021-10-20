@@ -23,13 +23,15 @@ public class User {
     String password;
     String birthday;
     @ApiModelProperty(required = false , hidden = true)
+    Boolean TempPassword = true;
+    @ApiModelProperty(required = false , hidden = true)
     @ManyToMany(fetch = FetchType.EAGER)
     Collection<Role> roles = new ArrayList<>();
 
     public User() {
     }
 
-    public User(Long id, String email, String username, String name, String surname, String password, String birthday, Collection<Role> roles) {
+    public User(Long id, String email, String username, String name, String surname, String password, String birthday, Boolean tempPassword, Collection<Role> roles) {
         this.id = id;
         this.email = email;
         this.username = username;
@@ -37,6 +39,7 @@ public class User {
         this.surname = surname;
         this.password = password;
         this.birthday = birthday;
+        TempPassword = tempPassword;
         this.roles = roles;
     }
 

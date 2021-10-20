@@ -2,6 +2,8 @@ package com.example.login.filter;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.example.login.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,8 +25,11 @@ import java.util.stream.Collectors;
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
 
-    public CustomAuthenticationFilter(AuthenticationManager authenticationManager){
+    private final UserRepository userRepository;
+
+    public CustomAuthenticationFilter(AuthenticationManager authenticationManager, UserRepository userRepository){
         this.authenticationManager = authenticationManager;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -41,22 +46,30 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
         User user = (User) authentication.getPrincipal();
-        Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
-        String access_token = JWT.create()
-                .withSubject(user.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000))
-                .withIssuer(request.getRequestURI().toString())
-                .withClaim("roles" , user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
-                .sign(algorithm);
-        String refresh_token = JWT.create()
-                .withSubject(user.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 30 * 60 * 1000))
-                .withIssuer(request.getRequestURI().toString())
-                .withClaim("roles" , user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
-                .sign(algorithm);
-        response.setHeader("Access Token" , access_token);
-        response.setHeader("Refresh Token" , refresh_token);
 
+        com.example.login.model.User chekUser = userRepository.findByUsername(user.getUsername());
+
+        if(chekUser.getTempPassword()){
+            log.error("Change Password");
+            response.setHeader("Error","Change your password");
+        }else {
+
+            Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+            String access_token = JWT.create()
+                    .withSubject(user.getUsername())
+                    .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000))
+                    .withIssuer(request.getRequestURI().toString())
+                    .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
+                    .sign(algorithm);
+            String refresh_token = JWT.create()
+                    .withSubject(user.getUsername())
+                    .withExpiresAt(new Date(System.currentTimeMillis() + 30 * 60 * 1000))
+                    .withIssuer(request.getRequestURI().toString())
+                    .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
+                    .sign(algorithm);
+            response.setHeader("Access Token", access_token);
+            response.setHeader("Refresh Token", refresh_token);
+        }
 /*
         Map<String , String> tokens = new HashMap<>();
         tokens.put("Access Token" , access_token);

@@ -34,13 +34,10 @@
           <element id="library" level="project" name="Maven: org.glassfish.jaxb:jaxb-runtime:2.3.5" />
           <element id="library" level="project" name="Maven: org.glassfish.jaxb:txw2:2.3.5" />
           <element id="library" level="project" name="Maven: com.sun.istack:istack-commons-runtime:3.0.12" />
-          <element id="library" level="project" name="Maven: com.sun.activation:jakarta.activation:1.2.2" />
           <element id="library" level="project" name="Maven: org.springframework.data:spring-data-jpa:2.5.5" />
           <element id="library" level="project" name="Maven: org.springframework.data:spring-data-commons:2.5.5" />
           <element id="library" level="project" name="Maven: org.springframework:spring-orm:5.3.10" />
-          <element id="library" level="project" name="Maven: org.springframework:spring-context:5.3.10" />
           <element id="library" level="project" name="Maven: org.springframework:spring-tx:5.3.10" />
-          <element id="library" level="project" name="Maven: org.springframework:spring-beans:5.3.10" />
           <element id="library" level="project" name="Maven: org.springframework:spring-aspects:5.3.10" />
           <element id="library" level="project" name="Maven: org.springframework.boot:spring-boot-starter-security:2.5.5" />
           <element id="library" level="project" name="Maven: org.springframework.boot:spring-boot-starter:2.5.5" />
@@ -100,6 +97,12 @@
           <element id="library" level="project" name="Maven: org.springframework.plugin:spring-plugin-core:2.0.0.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework.plugin:spring-plugin-metadata:2.0.0.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework.boot:spring-boot-starter-parent:2.5.5" />
+          <element id="library" level="project" name="Maven: org.springframework.boot:spring-boot-starter-mail:2.3.4.RELEASE" />
+          <element id="library" level="project" name="Maven: com.sun.mail:jakarta.mail:1.6.7" />
+          <element id="library" level="project" name="Maven: com.sun.activation:jakarta.activation:1.2.2" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-context-support:5.2.8.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-beans:5.3.10" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-context:5.3.10" />
         </element>
       </element>
       <element id="directory" name="META-INF">
