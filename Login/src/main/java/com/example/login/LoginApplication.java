@@ -3,9 +3,6 @@ package com.example.login;
 import com.example.login.Service.UserService;
 import com.example.login.model.Role;
 import com.example.login.model.User;
-import com.example.login.repository.RoleRepository;
-import com.example.login.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,7 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.ArrayList;
 
 @SpringBootApplication
-
 public class LoginApplication {
 
 
@@ -31,18 +27,29 @@ public class LoginApplication {
         return new BCryptPasswordEncoder();
    }
 
+
+
     @Bean
     CommandLineRunner run(UserService userService){
         return args -> {
+            userService.deleteAll();
 
             userService.saveRole(new Role(null , "ROLE_USER"));
             userService.saveRole(new Role(null , "ROLE_MANAGER"));
             userService.saveRole(new Role(null , "ROLE_ADMIN"));
             userService.saveRole(new Role(null , "ROLE_SUPER_ADMIN"));
 
-            userService.saveUser(new User(null , "Foxstrock@gmail.com","Foxstrock","Marcos","Sottile","Ciao","14/02/2002",new ArrayList<>()));
+            userService.saveUser(new User(null , "Foxstrock@gmail.com","user","Marcos","Sottile","Ciao","14/02/2002",new ArrayList<>()));
 
-            userService.addRoleToUser("Foxstrock" , "ROLE_ADMIN");
+            userService.addRoleToUser("user" , "ROLE_ADMIN");
+            userService.addRoleToUser("user" , "ROLE_USER");
+            userService.addRoleToUser("user" , "ROLE_MANAGER");
+            userService.addRoleToUser("user" , "ROLE_SUPER_ADMIN");
+
+
+
+
+
         };
     }
 

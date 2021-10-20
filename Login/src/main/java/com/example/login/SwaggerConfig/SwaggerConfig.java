@@ -1,4 +1,4 @@
-package com.example.login;
+package com.example.login.SwaggerConfig;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,20 +13,17 @@ import javax.servlet.ServletContext;
 
 @Configuration
 @EnableSwagger2
-public class ConfigLogin {
-
+public class SwaggerConfig {
     @Bean
     public Docket postAll(ServletContext servletContext){
         return new Docket(DocumentationType.SWAGGER_2)
                 .groupName("all")
                 .apiInfo(apiInfo())
                 .select()
-                .paths(PathSelectors.any())
-                .build();
+                .paths(PathSelectors.any()).build();
     }
 
-    private ApiInfo apiInfo(){
+    private ApiInfo apiInfo() {
         return new ApiInfoBuilder().title("Corso").description("Api Corso app create CodGo srl").build();
     }
-
 }

@@ -1,14 +1,19 @@
 package com.example.login.model;
 
 
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 
 
 @Entity
+@Data
 public class User {
     @Id
+    @ApiModelProperty(required = false , hidden = true)
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
     String email;
@@ -17,6 +22,7 @@ public class User {
     String surname;
     String password;
     String birthday;
+    @ApiModelProperty(required = false , hidden = true)
     @ManyToMany(fetch = FetchType.EAGER)
     Collection<Role> roles = new ArrayList<>();
 
